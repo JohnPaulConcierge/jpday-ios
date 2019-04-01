@@ -16,6 +16,8 @@ open class CalendarView: UIControl {
 
     open var daysViewHandler = DaysViewHandler()
 
+    //MARK: - Lifecycle
+
     public override init(frame: CGRect) {
         super.init(frame: frame)
         //TODO: handle init from a frame
@@ -32,12 +34,24 @@ open class CalendarView: UIControl {
         setup()
     }
 
+    open override func layoutSubviews() {
+        super.layoutSubviews()
+
+        daysView.map { daysViewHandler.resetCollectionViewScrollPosition($0) }
+    }
+
     fileprivate func setup() {
-        daysView?.isPagingEnabled = true
-        daysView?.delegate = daysViewHandler
-        daysView?.dataSource = daysViewHandler
-        daysView?.collectionViewLayout = DaysViewLayout()
-        daysView?.reloadData()
+
+        daysView.map {
+            $0.isPagingEnabled = true
+            $0.showsVerticalScrollIndicator = false
+            $0.showsHorizontalScrollIndicator = false
+            $0.delegate = daysViewHandler
+            $0.dataSource = daysViewHandler
+            $0.collectionViewLayout = DaysViewLayout()
+            $0.reloadData()
+            daysViewHandler.resetCollectionViewScrollPosition($0)
+        }
     }
 
 }

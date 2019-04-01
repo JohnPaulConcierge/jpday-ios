@@ -23,7 +23,7 @@ open class DaysViewHandler: NSObject,
 
     open var maximumDate = Date.distantFuture
 
-    open var visibleDate = Date()
+    open private(set) var visibleDate = Date()
 
     internal private(set) var sections: [DaysSection]
 
@@ -32,7 +32,7 @@ open class DaysViewHandler: NSObject,
         sections = []
         super.init()
 
-        try? reloadData()
+        try? resetSections()
     }
 
     open func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -67,7 +67,7 @@ open class DaysViewHandler: NSObject,
     /// Rebuilds the sections based on the current visible dates
     ///
     /// - Throws: An NSError when the dates could not be built
-    open func reloadData() throws {
+    open func resetSections() throws {
         sections = try [-1, 0, 1].map {
             guard let date = calendar.date(byAdding: .month, value: $0, to: visibleDate) else {
                 throw error("Could not build date with month offset \($0) from \(visibleDate)")
@@ -82,10 +82,63 @@ open class DaysViewHandler: NSObject,
         return numberOfWeekdays
     }
 
+    open func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if !decelerate {
+            handleScrollEnd(scrollView: scrollView)
+        }
+    }
+
+    public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        handleScrollEnd(scrollView: scrollView)
+    }
+
+    private func handleScrollEnd(scrollView: UIScrollView) {
+
+        guard let collectionView = scrollView as? UICollectionView else {
+            return
+        }
+
+        updateVisibleDate(for: collectionView)
+        collectionView.reloadData()
+        resetCollectionViewScrollPosition(collectionView)
+    }
+
     //MARK: - Convenience methods
 
     open func date(at indexPath: IndexPath) -> Date? {
         return sections[indexPath.section].date(at: indexPath.row - numberOfWeekdays, in: calendar)
+    }
+
+    /// Updates the visible date based on the collection view status
+    ///
+    /// The base implementation of this method uses the collectionView's X offset to determine if the visible
+    /// date should be moved up or down a month
+    ///
+    /// - Parameter collectionView: a collection view
+    open func updateVisibleDate(for collectionView: UICollectionView) {
+        let offset = collectionView.contentOffset.x
+        let width = collectionView.contentSize.width
+        let month: Int
+        if offset < width / 6 {
+            month = -1
+        } else if offset > width * 0.5 {
+            month = 1
+        } else {
+            month = 0
+        }
+
+        guard let date = calendar.date(byAdding: .month, value: month, to: visibleDate) else {
+            return
+        }
+        visibleDate = date
+        try? resetSections()
+    }
+
+    /// Scrolls the collection view back to the center
+    ///
+    /// - Parameter collectionView: a collection view
+    open func resetCollectionViewScrollPosition(_ collectionView: UICollectionView) {
+        collectionView.contentOffset.x = collectionView.bounds.width
     }
 
 }

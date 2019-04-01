@@ -57,7 +57,6 @@ open class DaysViewLayout: UICollectionViewLayout {
             for index in 0..<collectionView.numberOfItems(inSection: section) {
 
                 let indexPath = IndexPath(row: index, section: section)
-                print(indexPath)
                 let attribute = UICollectionViewLayoutAttributes(forCellWith: indexPath)
 
                 let column = CGFloat(index % numberOfColumns)
