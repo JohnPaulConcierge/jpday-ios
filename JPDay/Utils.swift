@@ -20,3 +20,9 @@ func monthDifference(from: Date, to: Date, in calendar: Calendar) -> Int {
                                    from: calendar.dateComponents(units, from: from),
                                    to: calendar.dateComponents(units, from: to)).month ?? 0
 }
+
+var defaultCalendar: Calendar {
+    var calendar = Calendar(identifier: .gregorian)
+    calendar.locale = Locale.autoupdatingCurrent
+    return calendar
+}

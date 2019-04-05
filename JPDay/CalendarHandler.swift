@@ -11,7 +11,7 @@ import Foundation
 /// A base class for calendar components handler
 open class CalendarHandler: NSObject {
 
-    open internal(set) var calendar = Calendar(identifier: .gregorian)
+    open internal(set) var calendar = defaultCalendar
 
     /// The minimum date displayed
     ///

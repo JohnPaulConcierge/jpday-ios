@@ -29,7 +29,8 @@ open class MonthPickerHandler: CalendarHandler,
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.collectionViewLayout = instantiateCollectionViewLayout()
-        collectionView.reloadData()
+
+        reloadData()
     }
 
     /// Creates a picker layout to be used in the `setup(collectionView:) function
@@ -89,7 +90,6 @@ open class MonthPickerHandler: CalendarHandler,
     }
 
     open func indexPath(for date: Date) -> IndexPath {
-        print(minimumDate, date, monthDifference(from: minimumDate, to: date, in: calendar))
         return IndexPath(row: monthDifference(from: minimumDate, to: date, in: calendar),
                          section: monthSectionIndex)
     }

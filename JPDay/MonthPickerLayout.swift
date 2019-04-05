@@ -15,7 +15,7 @@ open class MonthPickerLayout: UICollectionViewLayout {
     var highlightedIndexPath: IndexPath? = nil
 
     /// The estimated width of an item
-    open var estimatedCellWidth: CGFloat = 100
+    open var estimatedCellWidth: CGFloat = 150
 
     /// The attributes that were computed
     fileprivate var cachedAttributes = [UICollectionViewLayoutAttributes]()
@@ -41,8 +41,9 @@ open class MonthPickerLayout: UICollectionViewLayout {
     open override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
         if newBounds.size != collectionViewBounds.size {
             cachedAttributes.removeAll()
+            return true
         }
-        return true
+        return false
     }
 
     /// The collection view content size
@@ -65,22 +66,21 @@ open class MonthPickerLayout: UICollectionViewLayout {
     }
 
     open override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-
         try? cacheAttributes(until: rect.maxX)
-
-        var array = [UICollectionViewLayoutAttributes]()
-
-        for a in cachedAttributes {
-
-            if a.frame.minX > rect.maxX {
-                break
-            } else if a.frame.minX > rect.minX {
-                array.append(a)
-            }
+        
+        return cachedAttributes.filter {
+            $0.frame.minX <= rect.maxX && $0.frame.maxX >= rect.minX
         }
+    }
 
-        return array
-
+    open override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+        if indexPath.row < cachedAttributes.count {
+            return cachedAttributes[indexPath.row]
+        } else {
+            let a = UICollectionViewLayoutAttributes()
+            a.frame = CGRect(x: 0, y: 0, width: estimatedCellWidth, height: collectionViewBounds.height)
+            return a
+        }
     }
 
     //MARK: - Convenience methods
@@ -139,6 +139,17 @@ open class MonthPickerLayout: UICollectionViewLayout {
 
             return (indexPath: indexPath, dx: offset)
     }
+
+    open func preferredAttributes(at indexPath: IndexPath,
+                                  fitting attributes: UICollectionViewLayoutAttributes) throws
+        -> UICollectionViewLayoutAttributes {
+
+            guard let collectionView = collectionView,
+                let cell = collectionView.dataSource?.collectionView(collectionView, cellForItemAt: indexPath) else {
+                    throw error("Could not cache next attribute")
+            }
+            return cell.preferredLayoutAttributesFitting(attributes)
+    }
 }
 
 fileprivate extension MonthPickerLayout {
@@ -157,20 +168,14 @@ fileprivate extension MonthPickerLayout {
     }
 
     private func cacheNextAttributes() throws {
-
         let bounds = collectionViewBounds
         let indexPath = IndexPath(row: cachedAttributes.count, section: 0)
-
-        guard let collectionView = collectionView,
-            let cell = collectionView.dataSource?.collectionView(collectionView, cellForItemAt: indexPath) else {
-                throw error("Could not cache next attribute")
-        }
 
         var attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
         attributes.frame.size.height = bounds.height
         attributes.frame.size.width = estimatedCellWidth
 
-        attributes = cell.preferredLayoutAttributesFitting(attributes)
+        attributes = try preferredAttributes(at: indexPath, fitting: attributes)
         attributes.frame.origin.y = (bounds.height - attributes.frame.height) * 0.5
 
         if cachedAttributes.isEmpty {
@@ -184,6 +189,5 @@ fileprivate extension MonthPickerLayout {
         if cachedAttributes.count == numberOfItems {
             cachedAttributesMaxX += bounds.width * 0.5 - attributes.frame.width * 0.5
         }
-
     }
 }
