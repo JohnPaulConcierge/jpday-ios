@@ -8,32 +8,53 @@
 
 import UIKit
 
-open class DaysViewHandler: NSObject,
+open class DaysViewHandler: CalendarHandler,
     UICollectionViewDataSource,
     DaysViewLayoutDelegate
 {
-
-    open var calendar = Calendar(identifier: .gregorian)
-
-    open var numberOfWeekdays: Int
+    open var numberOfWeekdays: Int = 0
 
     public let numberOfRows = 7
 
-    open var minimumDate = Date.distantPast
-
-    open var maximumDate = Date.distantFuture
-
     open private(set) var visibleDate = Date()
 
-    internal private(set) var sections: [DaysSection]
+    internal private(set) var sections: [DaysSection] = []
 
     public override init() {
-        numberOfWeekdays = calendar.weekdaySymbols.count
-        sections = []
         super.init()
+
+        numberOfWeekdays = calendar.weekdaySymbols.count
 
         try? resetSections()
     }
+
+    /// Sets up the collection view for this handler
+    ///
+    /// - Parameter collectionView: a collection view or nil
+    open func setup(collectionView: UICollectionView?) {
+        guard let collectionView = collectionView else {
+            return
+        }
+
+        collectionView.isPagingEnabled = true
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.collectionViewLayout = instantiateCollectionViewLayout()
+        collectionView.reloadData()
+
+        resetCollectionViewScrollPosition(collectionView)
+    }
+
+    /// Creates a picker layout to be used in the `setup(collectionView:) function
+    ///
+    /// - Returns: a layout
+    open func instantiateCollectionViewLayout() -> UICollectionViewLayout {
+        return DaysViewLayout()
+    }
+
+    //MARK: - UICollectionViewDataSource
 
     open func numberOfSections(in collectionView: UICollectionView) -> Int {
         // 3 pages of content

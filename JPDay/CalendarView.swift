@@ -16,6 +16,8 @@ open class CalendarView: UIControl {
 
     open var daysViewHandler = DaysViewHandler()
 
+    open var monthPickerHandler = MonthPickerHandler()
+
     //MARK: - Lifecycle
 
     public override init(frame: CGRect) {
@@ -40,18 +42,10 @@ open class CalendarView: UIControl {
         daysView.map { daysViewHandler.resetCollectionViewScrollPosition($0) }
     }
 
-    fileprivate func setup() {
+    open func setup() {
 
-        daysView.map {
-            $0.isPagingEnabled = true
-            $0.showsVerticalScrollIndicator = false
-            $0.showsHorizontalScrollIndicator = false
-            $0.delegate = daysViewHandler
-            $0.dataSource = daysViewHandler
-            $0.collectionViewLayout = DaysViewLayout()
-            $0.reloadData()
-            daysViewHandler.resetCollectionViewScrollPosition($0)
-        }
+        daysView.map { daysViewHandler.setup(collectionView: $0) }
+        monthPickerView.map { monthPickerHandler.setup(collectionView: $0) }
     }
 
 }

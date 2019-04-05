@@ -13,3 +13,10 @@ func error(_ message: String) -> NSError {
                    code: -1,
                    userInfo: [NSLocalizedDescriptionKey: message])
 }
+
+func monthDifference(from: Date, to: Date, in calendar: Calendar) -> Int {
+    let units: Set<Calendar.Component> = [.day, .month, .year]
+    return calendar.dateComponents([.month],
+                                   from: calendar.dateComponents(units, from: from),
+                                   to: calendar.dateComponents(units, from: to)).month ?? 0
+}
