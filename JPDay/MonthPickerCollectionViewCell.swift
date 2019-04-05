@@ -11,6 +11,7 @@ import Foundation
 /// A class to display a month in the month picker
 open class MonthPickerCollectionViewCell: UICollectionViewCell {
 
+    /// A label where the month will be displayed
     @IBOutlet open weak var label: UILabel?
 
     /// Displays the month in that view
@@ -25,6 +26,10 @@ open class MonthPickerCollectionViewCell: UICollectionViewCell {
         label?.text = calendar.monthSymbols[month - 1]
     }
 
+    /// Returns the size of the cell based on its constraints
+    ///
+    /// - Parameter layoutAttributes: a layout attribute
+    /// - Returns: the same layout attributes instance, with a size computed using the cell's constraints
     open override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes)
         -> UICollectionViewLayoutAttributes {
             let size = contentView.systemLayoutSizeFitting(layoutAttributes.size)
@@ -32,6 +37,9 @@ open class MonthPickerCollectionViewCell: UICollectionViewCell {
             return layoutAttributes
     }
 
+    /// True if the cell is selected
+    ///
+    /// The default implementation updates the highlighted state of the label to match
     open override var isSelected: Bool {
         didSet {
             label?.isHighlighted = isSelected
