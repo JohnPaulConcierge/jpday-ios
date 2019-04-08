@@ -9,7 +9,9 @@
 import Foundation
 
 /// A base class for calendar components handler
-open class CalendarHandler: NSObject {
+open class CalendarHandler: NSObject,
+    UICollectionViewDelegate
+{
 
     open internal(set) var calendar = defaultCalendar
 
@@ -19,5 +21,23 @@ open class CalendarHandler: NSObject {
     open internal(set) var minimumDate = Date(timeIntervalSince1970: 0)
 
     open internal(set) var maximumDate = Date.distantFuture
+
+    open private(set) var collectionView: UICollectionView?
+
+    open private(set) var isDragging: Bool = false
+
+    open func setup(collectionView: UICollectionView?) {
+        self.collectionView = collectionView
+    }
+
+    //MARK: - UICollectionViewDelegate
+
+    open func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        self.isDragging = true
+    }
+
+    open func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        self.isDragging = false
+    }
 
 }

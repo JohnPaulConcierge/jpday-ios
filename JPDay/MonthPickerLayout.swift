@@ -11,9 +11,6 @@ import Foundation
 /// A layout that magnetizes an item in the center
 open class MonthPickerLayout: UICollectionViewLayout {
 
-    /// The path that is in the center of the layout or nil if the content is empty
-    var highlightedIndexPath: IndexPath? = nil
-
     /// The estimated width of an item
     open var estimatedCellWidth: CGFloat = 150
 
@@ -74,8 +71,8 @@ open class MonthPickerLayout: UICollectionViewLayout {
     }
 
     open override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
-        if indexPath.row < cachedAttributes.count {
-            return cachedAttributes[indexPath.row]
+        if let attrs = cachedAttributeAt(indexPath: indexPath) {
+            return attrs
         } else {
             let a = UICollectionViewLayoutAttributes()
             a.frame = CGRect(x: 0, y: 0, width: estimatedCellWidth, height: collectionViewBounds.height)
@@ -101,9 +98,10 @@ open class MonthPickerLayout: UICollectionViewLayout {
         }
 
         try? cacheAttributes(until: collectionView.contentOffset.x + collectionView.bounds.width)
-        return findCenterIndexPath(inAttributes: cachedAttributes)
+        return findCenterIndexPath(inAttributes: collectionView.indexPathsForVisibleItems.compactMap {
+            cachedAttributeAt(indexPath: $0)
+        })
     }
-
 
     //MARK: - Private methods
 
@@ -153,6 +151,13 @@ open class MonthPickerLayout: UICollectionViewLayout {
 }
 
 fileprivate extension MonthPickerLayout {
+
+    func cachedAttributeAt(indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+        if indexPath.row < cachedAttributes.count {
+            return cachedAttributes[indexPath.row]
+        }
+        return nil
+    }
 
     func cacheAttributes(until maxX: CGFloat) throws {
         while cachedAttributesMaxX < maxX && cachedAttributes.count < numberOfItems {

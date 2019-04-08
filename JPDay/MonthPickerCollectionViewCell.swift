@@ -45,5 +45,9 @@ open class MonthPickerCollectionViewCell: UICollectionViewCell {
             label?.isHighlighted = isSelected
         }
     }
+
+    open func apply(highlight: Bool) {
+//        label?.isHighlighted = highlight
+    }
     
 }

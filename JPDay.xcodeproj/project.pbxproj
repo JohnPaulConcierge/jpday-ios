@@ -12,6 +12,7 @@
 		FF13C2BE2257AD1D00AD29F3 /* MonthPickerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF13C2BD2257AD1D00AD29F3 /* MonthPickerCollectionViewCell.swift */; };
 		FF13C2C22257B08000AD29F3 /* MonthPickerHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF13C2C12257B08000AD29F3 /* MonthPickerHandlerTests.swift */; };
 		FF13C2C42257C8AB00AD29F3 /* UtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF13C2C32257C8AB00AD29F3 /* UtilsTests.swift */; };
+		FF27569622580ECF001B0572 /* MonthPickerHandlerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF27569522580ECF001B0572 /* MonthPickerHandlerDelegate.swift */; };
 		FF37E82122529EA6004D037D /* DaysViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF37E82022529EA6004D037D /* DaysViewLayout.swift */; };
 		FF37E82322529EB5004D037D /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF37E82222529EB5004D037D /* CalendarView.swift */; };
 		FF37E82522529F5E004D037D /* DaysViewHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF37E82422529F5E004D037D /* DaysViewHandler.swift */; };
@@ -45,6 +46,7 @@
 		FF13C2BD2257AD1D00AD29F3 /* MonthPickerCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthPickerCollectionViewCell.swift; sourceTree = "<group>"; };
 		FF13C2C12257B08000AD29F3 /* MonthPickerHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthPickerHandlerTests.swift; sourceTree = "<group>"; };
 		FF13C2C32257C8AB00AD29F3 /* UtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilsTests.swift; sourceTree = "<group>"; };
+		FF27569522580ECF001B0572 /* MonthPickerHandlerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthPickerHandlerDelegate.swift; sourceTree = "<group>"; };
 		FF37E82022529EA6004D037D /* DaysViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaysViewLayout.swift; sourceTree = "<group>"; };
 		FF37E82222529EB5004D037D /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		FF37E82422529F5E004D037D /* DaysViewHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaysViewHandler.swift; sourceTree = "<group>"; };
@@ -132,6 +134,7 @@
 				FF13C2BD2257AD1D00AD29F3 /* MonthPickerCollectionViewCell.swift */,
 				FFFB3CD722569910001B23E4 /* MonthPickerHandler.swift */,
 				FFFB3CD522569904001B23E4 /* MonthPickerLayout.swift */,
+				FF27569522580ECF001B0572 /* MonthPickerHandlerDelegate.swift */,
 			);
 			name = Months;
 			sourceTree = "<group>";
@@ -260,6 +263,7 @@
 				FF37E8272252B23B004D037D /* DaysViewLayoutDelegate.swift in Sources */,
 				FFFB3CD822569910001B23E4 /* MonthPickerHandler.swift in Sources */,
 				FFFB3CD622569904001B23E4 /* MonthPickerLayout.swift in Sources */,
+				FF27569622580ECF001B0572 /* MonthPickerHandlerDelegate.swift in Sources */,
 				FF13C2BC2257A4FF00AD29F3 /* CalendarHandler.swift in Sources */,
 				FF37E8422252C9EA004D037D /* Utils.swift in Sources */,
 				FF37E8402252C8CD004D037D /* DaysSection.swift in Sources */,

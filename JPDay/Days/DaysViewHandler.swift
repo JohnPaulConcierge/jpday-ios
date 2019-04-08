@@ -31,7 +31,10 @@ open class DaysViewHandler: CalendarHandler,
     /// Sets up the collection view for this handler
     ///
     /// - Parameter collectionView: a collection view or nil
-    open func setup(collectionView: UICollectionView?) {
+    open override func setup(collectionView: UICollectionView?) {
+
+        super.setup(collectionView: collectionView)
+
         guard let collectionView = collectionView else {
             return
         }
@@ -103,7 +106,8 @@ open class DaysViewHandler: CalendarHandler,
         return numberOfWeekdays
     }
 
-    open func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+    open override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        super.scrollViewDidEndDragging(scrollView, willDecelerate: decelerate)
         if !decelerate {
             handleScrollEnd(scrollView: scrollView)
         }
